@@ -1,0 +1,7 @@
+{
+  "name": "vilaFront",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

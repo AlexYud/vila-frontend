@@ -15,12 +15,12 @@ export class Tab2Page {
   constructor(private alertController: AlertController, private utils: UtilsService, private api: ApiService) { }
 
   ngOnInit() {
-    this.api.getAllLobbys().subscribe(servers => {
-      this.servers = servers;
-    });
+    this.getLobbys();
   }
 
   async createLobby() {
+    if (this.api.getUserId() === -1) return await this.utils.presentToast('danger', 'close-circle', 'Choose a name before.')
+
     const alert = await this.alertController.create({
       header: 'Please enter the lobby data',
       buttons: ['Cancel', 'OK'],
@@ -34,8 +34,8 @@ export class Tab2Page {
         {
           type: 'number',
           placeholder: 'Capacity',
-          min: 1,
-          max: 1,
+          min: 5,
+          max: 5,
         },
       ],
     });
@@ -47,6 +47,12 @@ export class Tab2Page {
 
   }
 
+  getLobbys() {
+    this.api.getAllLobbys().subscribe(servers => {
+      this.servers = servers;
+    });
+  }
+
   async validateLobbyData(data: any) {
     if (data[0].length === 0) return await this.utils.presentToast('danger', 'close-circle', 'Empty name not allowed.');
     if (data[1].length === 0) return await this.utils.presentToast('danger', 'close-circle', 'Empty capacity not allowed.');
@@ -56,6 +62,7 @@ export class Tab2Page {
   sendLobbyData(data: any) {
     this.api.createLobby(data[0], data[1]).subscribe((resp: any) => {
       this.utils.presentToast('success', 'checkmark-circle', JSON.stringify(resp));
+      this.getLobbys();
     });
   }
 

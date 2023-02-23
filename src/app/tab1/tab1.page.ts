@@ -11,10 +11,12 @@ import { UtilsService } from '../services/utils.service';
 
 export class Tab1Page {
 
+  userName: string = 'Galowillian'
+
   constructor(private api: ApiService, private alertController: AlertController, private utils: UtilsService) { }
 
   ngOnInit() {
-
+    this.userName = this.api.getUserName();
   }
 
   async presentAlert() {
@@ -35,9 +37,8 @@ export class Tab1Page {
       await alert.present();
 
       const { role, data } = await alert.onDidDismiss();
-      if (role === undefined) {
-        this.validateName(data.values[0]);
-      }
+      if (role === undefined) this.validateName(data.values[0]);
+
     } catch (error) {
       await this.utils.presentToast('danger', 'close-circle', JSON.stringify(error));
     }
@@ -45,11 +46,8 @@ export class Tab1Page {
 
   async validateName(name: string) {
     try {
-      if (name.length === 0) {
-        await this.utils.presentToast('danger', 'close-circle', 'Empty name is not allowed.')
-      } else {
-        this.sendName(name);
-      }
+      if (name.length === 0) return await this.utils.presentToast('danger', 'close-circle', 'Empty name is not allowed.');
+      return this.sendName(name);
     } catch (error) {
       await this.utils.presentToast('danger', 'close-circle', JSON.stringify(error));
     }
@@ -57,10 +55,11 @@ export class Tab1Page {
 
   sendName(name: string) {
     this.api.createUser(name).subscribe(id => {
-      console.log(id);
-
+      console.log('user id:' + id);
       this.api.setUserId(id);
-    })
+      this.api.setUserName(name);
+      this.userName = name;
+    });
   }
 
 

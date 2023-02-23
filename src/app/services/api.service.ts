@@ -12,6 +12,7 @@ export class ApiService {
   private url: string = 'http://localhost:3000/';
   private socket: any = io(this.url, { transports: ['websocket'], reconnection: true });
   private userId: number = -1;
+  private userName: string = 'Galowillian';
 
   constructor(private http: HttpClient) { }
 
@@ -27,7 +28,27 @@ export class ApiService {
     return this.userId;
   }
 
+  setUserName(name: string) {
+    this.userName = name;
+  }
+
+  getUserName() {
+    return this.userName;
+  }
+
   createUser(name: string): Observable<any> {
     return this.http.post<any>(`${this.url}api/createUser`, { name });
+  }
+
+  getAllLobbys(): Observable<any> {
+    return this.http.get<any>(`${this.url}api/getAllLobbys`);
+  }
+
+  createLobby(name: string, capacity: number): Observable<any> {
+    return this.http.post<any>(`${this.url}api/createLobby`, {
+      name,
+      capacity,
+      userId: this.userId,
+    });
   }
 }

@@ -25,51 +25,12 @@
   </ion-item>
 
   <ion-list>
-    <ion-item>
+    <ion-item *ngFor="let server of servers">
       <ion-col size="5">
-        <ion-label>testesaaaaaaaaaaaaaaaaaaaaaaaa</ion-label>
+        <ion-label>{{ server.name }}</ion-label>
       </ion-col>
       <ion-col size="4" class="ion-text-center">
-        <ion-label>5/5</ion-label>
-      </ion-col>
-      <ion-col size="3" class="ion-text-center">
-        <ion-button>
-          <ion-icon name="arrow-forward"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-item>
-    <ion-item>
-      <ion-col size="5">
-        <ion-label>Só os jorge</ion-label>
-      </ion-col>
-      <ion-col size="4" class="ion-text-center">
-        <ion-label>1/5</ion-label>
-      </ion-col>
-      <ion-col size="3" class="ion-text-center">
-        <ion-button>
-          <ion-icon name="arrow-forward"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-item>
-    <ion-item>
-      <ion-col size="5">
-        <ion-label>Familia</ion-label>
-      </ion-col>
-      <ion-col size="4" class="ion-text-center">
-        <ion-label>3/5</ion-label>
-      </ion-col>
-      <ion-col size="3" class="ion-text-center">
-        <ion-button>
-          <ion-icon name="arrow-forward"></ion-icon>
-        </ion-button>
-      </ion-col>
-    </ion-item>
-    <ion-item>
-      <ion-col size="5">
-        <ion-label>Smbaa</ion-label>
-      </ion-col>
-      <ion-col size="4" class="ion-text-center">
-        <ion-label>2/5</ion-label>
+        <ion-label>{{ server.currentAmount }}/{{ server.capacity }}</ion-label>
       </ion-col>
       <ion-col size="3" class="ion-text-center">
         <ion-button>

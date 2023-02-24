@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ApiService } from '../services/api.service';
 import { UtilsService } from '../services/utils.service';
@@ -12,23 +13,26 @@ export class Tab2Page {
 
   servers: any[] = [];
 
-  constructor(private alertController: AlertController, private utils: UtilsService, private api: ApiService) { }
+  constructor(
+    private alertController: AlertController, 
+    private utils: UtilsService, 
+    private api: ApiService,
+    public router: Router,
+    ) { }
 
   ngOnInit() {
     this.getLobbys();
   }
 
   async createLobby() {
-    if (this.api.getUserId() === -1) return await this.utils.presentToast('danger', 'close-circle', 'Choose a name before.')
-
     const alert = await this.alertController.create({
       header: 'Please enter the lobby data',
       buttons: ['Cancel', 'OK'],
       inputs: [
         {
-          placeholder: 'Lobby name (max 8 characters)',
+          placeholder: 'Lobby name (max 15 characters)',
           attributes: {
-            maxlength: 8,
+            maxlength: 15,
           },
         },
         {
@@ -60,10 +64,10 @@ export class Tab2Page {
   }
 
   sendLobbyData(data: any) {
-    this.api.createLobby(data[0], data[1]).subscribe((resp: any) => {
-      this.utils.presentToast('success', 'checkmark-circle', JSON.stringify(resp));
-      this.getLobbys();
-    });
+    this.api.createLobby(data[0], data[1]).subscribe({
+      next: (lobbyId) => this.router.navigate(['lobby', lobbyId[0]], { replaceUrl: true }),
+      error: (e) => this.utils.presentToast('danger', 'close-circle', JSON.stringify(e)),
+  });
   }
 
 }

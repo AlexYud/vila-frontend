@@ -11,7 +11,7 @@ export class ApiService {
 
   private url: string = 'http://localhost:3000/';
   private socket: any = io(this.url, { transports: ['websocket'], reconnection: true });
-  private userId: number = -1;
+  private userId: number = 1;
   private userName: string = 'Galowillian';
 
   constructor(private http: HttpClient) { }
@@ -50,5 +50,13 @@ export class ApiService {
       capacity,
       userId: this.userId,
     });
+  }
+
+  deleteLobby(lobbyId: number): Observable<any> {
+    return this.http.post<any>(`${this.url}api/deleteLobby`, { lobbyId });
+  }
+
+  joinLobby(userId: number, lobbyId: any): Observable<any> {
+    return this.http.post<any>(`${this.url}api/joinLobby`, { userId, lobbyId });
   }
 }

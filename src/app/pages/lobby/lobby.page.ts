@@ -47,4 +47,8 @@ export class LobbyPage implements OnInit {
     });
   }
 
+  exitLobby() {
+    this.socket.emit('exitLobby', this.data);
+  }
+
 }

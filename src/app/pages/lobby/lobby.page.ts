@@ -21,10 +21,12 @@ export class LobbyPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.api.joinLobby(this.api.getUserId(), this.lobbyId).subscribe({
-      next: (a) => console.log(a),
-      error: (e) => console.log(e),
-    });
+    const socket = this.api.getSocket();
+    socket.emit('joinLobby', 'ola');
+    // this.api.joinLobby(this.api.getUserId(), this.lobbyId).subscribe({
+    //   next: (a) => console.log(a),
+    //   error: (e) => console.log(e),
+    // });
   }
 
   deleteLobby() {

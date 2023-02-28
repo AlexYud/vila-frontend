@@ -36,6 +36,10 @@ export class ApiService {
     return this.userName;
   }
 
+  getSocket() {
+    return this.socket;
+  }
+
   createUser(name: string): Observable<any> {
     return this.http.post<any>(`${this.url}api/createUser`, { name });
   }
@@ -56,7 +60,7 @@ export class ApiService {
     return this.http.post<any>(`${this.url}api/deleteLobby`, { lobbyId });
   }
 
-  joinLobby(userId: number, lobbyId: any): Observable<any> {
-    return this.http.post<any>(`${this.url}api/joinLobby`, { userId, lobbyId });
-  }
+  // joinLobby(userId: number, lobbyId: any): Observable<any> {
+  //   return this.http.post<any>(`${this.url}api/joinLobby`, { userId, lobbyId });
+  // }
 }

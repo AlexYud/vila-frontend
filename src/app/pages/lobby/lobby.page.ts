@@ -35,7 +35,7 @@ export class LobbyPage implements OnInit {
     //   next: (a) => console.log(a),
     //   error: (e) => console.log(e),
     // });
-    this.socket.on(`joined ${this.lobbyId}`, (playersInLobby: any) => {
+    this.socket.on(`update ${this.lobbyId}`, (playersInLobby: any) => {
       this.players = playersInLobby;
     })
   }

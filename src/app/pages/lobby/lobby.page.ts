@@ -42,14 +42,14 @@ export class LobbyPage implements OnInit {
 
   deleteLobby() {
     this.api.deleteLobby(this.lobbyId).subscribe({
-      next: () => this.router.navigate(['tabs/tab2']),
+      next: () => this.router.navigate(['tabs/tab2'], { replaceUrl: true }),
       error: (e) => this.utils.presentToast('danger', 'close-circle', JSON.stringify(e))
     });
   }
 
   exitLobby() {
     this.socket.emit('exitLobby', this.data);
-    this.router.navigate(['tabs/tab2']);
+    this.router.navigate(['tabs/tab2'], { replaceUrl: true });
   }
 
 }

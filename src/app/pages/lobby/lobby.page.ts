@@ -11,6 +11,8 @@ import { UtilsService } from 'src/app/services/utils.service';
 export class LobbyPage implements OnInit {
   private lobbyId: number = Number(this.route.snapshot.paramMap.get('id'));
 
+  private socket = this.api.getSocket();
+
   private players: any[] = [];
 
   private data = {
@@ -28,14 +30,13 @@ export class LobbyPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    const socket = this.api.getSocket();
-    socket.emit('joinLobby', this.data);
+    this.socket.emit('joinLobby', this.data);
     // this.api.joinLobby(this.api.getUserId(), this.lobbyId).subscribe({
     //   next: (a) => console.log(a),
     //   error: (e) => console.log(e),
     // });
-    socket.on(`joined ${this.lobbyId}`, (data: any) => {
-      this.players.push(data);
+    this.socket.on(`joined ${this.lobbyId}`, (playersInLobby: any) => {
+      this.players = playersInLobby;
     })
   }
 

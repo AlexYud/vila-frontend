@@ -49,6 +49,7 @@ export class LobbyPage implements OnInit {
 
   exitLobby() {
     this.socket.emit('exitLobby', this.data);
+    this.router.navigate(['tabs/tab2']);
   }
 
 }

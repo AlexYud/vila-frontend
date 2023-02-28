@@ -13,6 +13,7 @@ export class ApiService {
   private socket: any = io(this.url, { transports: ['websocket'], reconnection: true });
   private userId: number = 1;
   private userName: string = 'Galowillian';
+  private userLevel: number = 0;
 
   constructor(private http: HttpClient) { }
 
@@ -34,6 +35,14 @@ export class ApiService {
 
   getUserName() {
     return this.userName;
+  }
+
+  setUserLevel(level: number) {
+    this.userLevel = level;
+  }
+
+  getUserLevel() {
+    return this.userLevel;
   }
 
   getSocket() {

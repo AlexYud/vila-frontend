@@ -14,8 +14,9 @@ export class LobbyPage implements OnInit {
   private players: any[] = [];
 
   private data = {
-    userName: this.api.getUserName(),
     userId: this.api.getUserId(),
+    userName: this.api.getUserName(),
+    userLevel: this.api.getUserLevel(),
     lobbyId: this.lobbyId,
   }
 
@@ -34,7 +35,7 @@ export class LobbyPage implements OnInit {
     //   error: (e) => console.log(e),
     // });
     socket.on(`joined ${this.lobbyId}`, (data: any) => {
-      console.log(data);
+      this.players.push(data);
     })
   }
 

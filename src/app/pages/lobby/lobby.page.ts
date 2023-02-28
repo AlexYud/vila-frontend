@@ -13,6 +13,11 @@ export class LobbyPage implements OnInit {
 
   private players: any[] = [];
 
+  private data = {
+    userId: this.api.getUserId(),
+    lobbyId: this.lobbyId,
+  }
+
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
@@ -22,7 +27,7 @@ export class LobbyPage implements OnInit {
 
   ngOnInit() {
     const socket = this.api.getSocket();
-    socket.emit('joinLobby', 'ola');
+    socket.emit('joinLobby', this.data);
     // this.api.joinLobby(this.api.getUserId(), this.lobbyId).subscribe({
     //   next: (a) => console.log(a),
     //   error: (e) => console.log(e),

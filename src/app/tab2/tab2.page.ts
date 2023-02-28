@@ -54,6 +54,8 @@ export class Tab2Page {
   getLobbys() {
     this.api.getAllLobbys().subscribe(servers => {
       this.servers = servers;
+      console.log(servers);
+      
     });
   }
 
@@ -68,6 +70,10 @@ export class Tab2Page {
       next: (lobbyId) => this.router.navigate(['lobby', lobbyId[0]], { replaceUrl: true }),
       error: (e) => this.utils.presentToast('danger', 'close-circle', JSON.stringify(e)),
   });
+  }
+
+  joinLobby(lobbyId: number) {
+    this.router.navigate(['lobby', lobbyId], { replaceUrl: true })
   }
 
 }

@@ -56,6 +56,7 @@ export class LobbyPage implements OnInit {
           text: 'Sair e Desfazer grupo',
           role: 'cancel',
           handler: () => {
+            this.api.setIsInLobby(false);
             this.deleteLobby();
           },
         },
@@ -63,6 +64,7 @@ export class LobbyPage implements OnInit {
           text: 'Sair',
           role: 'confirm',
           handler: () => {
+            this.api.setIsInLobby(false);
             this.socket.emit('exitLobby', this.data);
             this.router.navigate(['tabs/tab2'], { replaceUrl: true });
           },
@@ -91,6 +93,7 @@ export class LobbyPage implements OnInit {
       if (this.leader) {
         await this.presentAlert();
       } else {
+        this.api.setIsInLobby(false);
         this.socket.emit('exitLobby', this.data);
         this.router.navigate(['tabs/tab2'], { replaceUrl: true });
       }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { UtilsService } from 'src/app/services/utils.service';
 
@@ -15,6 +16,8 @@ export class LobbyPage implements OnInit {
 
   private players: any[] = [];
 
+  private leader: boolean = false;
+
   private data = {
     userId: this.api.getUserId(),
     userName: this.api.getUserName(),
@@ -27,6 +30,7 @@ export class LobbyPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private utils: UtilsService,
+    private alertController: AlertController,
   ) { }
 
   ngOnInit() {
@@ -37,7 +41,41 @@ export class LobbyPage implements OnInit {
     // });
     this.socket.on(`update ${this.lobbyId}`, (playersInLobby: any) => {
       this.players = playersInLobby;
+      this.leader = this.isLeader();
     })
+  }
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Alert!',
+      buttons: [
+        {
+          text: 'Sair e Desfazer grupo',
+          role: 'cancel',
+          handler: () => {
+            console.log('haha');
+            
+          },
+        },
+        {
+          text: 'Sair',
+          role: 'confirm',
+          handler: () => {
+            console.log('sair');
+            
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+  }
+
+  isLeader() {
+    if (this.players.filter(p => p.isLeader === true && p.userId === this.api.getUserId())) return true;
+    return false;
   }
 
   deleteLobby() {
@@ -47,9 +85,17 @@ export class LobbyPage implements OnInit {
     });
   }
 
-  exitLobby() {
-    this.socket.emit('exitLobby', this.data);
-    this.router.navigate(['tabs/tab2'], { replaceUrl: true });
+  async exitLobby() {
+    try {
+      if (this.isLeader()) {
+        await this.presentAlert();
+      } else {
+        this.socket.emit('exitLobby', this.data);
+        this.router.navigate(['tabs/tab2'], { replaceUrl: true });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 }

@@ -34,15 +34,17 @@ export class LobbyPage implements OnInit {
   ) { }
 
   ngOnInit() { 
-    this.api.getUsersInLobby(this.lobbyId).subscribe({
-      next: (usersInLobby) => {
-        this.users = usersInLobby;
-        if (this.isLeader()) this.leader = true;
-      },
-      error: (e) => this.utils.presentToast('danger', 'close-circle', JSON.stringify(e))
-    });
+    // this.api.getUsersInLobby(this.lobbyId).subscribe({
+    //   next: (usersInLobby) => {
+    //     this.users = usersInLobby;
+    //     if (this.isLeader()) this.leader = true;
+    //   },
+    //   error: (e) => this.utils.presentToast('danger', 'close-circle', JSON.stringify(e))
+    // });
     this.socket.emit('joinLobby', this.data);
     this.socket.on(`update ${this.lobbyId}`, (usersInLobby: any) => {
+      console.log(usersInLobby);
+      
       this.users = usersInLobby;
       if (this.isLeader()) this.leader = true;
     })

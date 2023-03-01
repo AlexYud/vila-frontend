@@ -19,9 +19,11 @@
       <ion-label>Level</ion-label>
     </ion-col>
     <ion-col size="3" class="ion-text-center">
-      <ion-button color="danger" (click)="deleteLobby()">
-        <ion-icon name="trash"></ion-icon>
-      </ion-button>
+      <div *ngIf="leader === true">
+        <ion-button color="danger" (click)="deleteLobby()">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
+      </div>
     </ion-col>
   </ion-item>
 
@@ -35,9 +37,14 @@
         <ion-label>0</ion-label>
       </ion-col>
       <ion-col size="3" class="ion-text-center">
-        <ion-button>
-          <ion-icon name="arrow-forward"></ion-icon>
-        </ion-button>
+        <div *ngIf="user.id === data.userId && leader === true">
+          <ion-icon name="flag" color="primary" size="large"></ion-icon>
+        </div>
+        <div *ngIf="user.id !== data.userId && leader === true">
+          <ion-button color="danger" (click)="deleteLobby()">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </div>
       </ion-col>
     </ion-item>
   </ion-list>

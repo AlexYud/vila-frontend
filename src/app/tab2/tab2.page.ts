@@ -54,8 +54,6 @@ export class Tab2Page {
   getLobbys() {
     this.api.getAllLobbys().subscribe(servers => {
       this.servers = servers;
-      console.log(servers);
-      
     });
   }
 
@@ -67,12 +65,16 @@ export class Tab2Page {
 
   sendLobbyData(data: any) {
     this.api.createLobby(data[0], data[1]).subscribe({
-      next: (lobbyId) => this.router.navigate(['lobby', lobbyId[0]], { replaceUrl: true }),
+      next: (lobbyId) => {
+        this.api.setIsInLobby(true);  
+        this.router.navigate(['lobby', lobbyId[0]], { replaceUrl: true });
+      },
       error: (e) => this.utils.presentToast('danger', 'close-circle', JSON.stringify(e)),
   });
   }
 
   joinLobby(lobbyId: number) {
+    this.api.setIsInLobby(true);  
     this.router.navigate(['lobby', lobbyId], { replaceUrl: true })
   }
 

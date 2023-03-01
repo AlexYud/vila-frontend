@@ -14,6 +14,7 @@ export class ApiService {
   private userId: number = 1;
   private userName: string = 'Galowillian';
   private userLevel: number = 0;
+  private isInLobby: boolean = false;
 
   constructor(private http: HttpClient) { }
 
@@ -45,6 +46,14 @@ export class ApiService {
     return this.userLevel;
   }
 
+  setIsInLobby(value: boolean) {
+    this.isInLobby = value;
+  }
+
+  getIsInLobby() {
+    return this.isInLobby;
+  }
+
   getSocket() {
     return this.socket;
   }
@@ -67,6 +76,10 @@ export class ApiService {
 
   deleteLobby(lobbyId: number): Observable<any> {
     return this.http.post<any>(`${this.url}api/deleteLobby`, { lobbyId });
+  }
+
+  getUsersInLobby(lobbyId: number): Observable<any> {
+    return this.http.post<any>(`${this.url}api/getUsersInLobby`, { lobbyId });
   }
 
   // joinLobby(userId: number, lobbyId: any): Observable<any> {

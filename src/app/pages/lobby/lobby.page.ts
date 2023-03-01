@@ -14,7 +14,7 @@ export class LobbyPage implements OnInit {
 
   private socket = this.api.getSocket();
 
-  private players: any[] = [];
+  private users: any[] = [];
 
   private leader: boolean = false;
 
@@ -33,15 +33,18 @@ export class LobbyPage implements OnInit {
     private alertController: AlertController,
   ) { }
 
-  ngOnInit() {
-    this.socket.emit('joinLobby', this.data);
-    // this.api.joinLobby(this.api.getUserId(), this.lobbyId).subscribe({
-    //   next: (a) => console.log(a),
-    //   error: (e) => console.log(e),
-    // });
-    this.socket.on(`update ${this.lobbyId}`, (playersInLobby: any) => {
-      this.players = playersInLobby;
-      this.leader = this.isLeader();
+  ngOnInit() { 
+    if (!this.api.getIsInLobby()) this.socket.emit('joinLobby', this.data);
+    this.api.getUsersInLobby(this.lobbyId).subscribe({
+      next: (usersInLobby) => {
+        this.users = usersInLobby;
+        if (this.isLeader()) this.leader = true;
+      },
+      error: (e) => this.utils.presentToast('danger', 'close-circle', JSON.stringify(e))
+    })
+    this.socket.on(`update ${this.lobbyId}`, (usersInLobby: any) => {
+      this.users = usersInLobby;
+      if (this.isLeader()) this.leader = true;
     })
   }
 
@@ -69,11 +72,11 @@ export class LobbyPage implements OnInit {
 
     await alert.present();
 
-    const { role } = await alert.onDidDismiss();
+    // const { role } = await alert.onDidDismiss();
   }
 
   isLeader() {
-    return this.players.filter(p => p.userId === this.api.getUserId())[0].isLeader;
+    return this.users.filter(u => u.userId === this.api.getUserId())[0].isLeader;
   }
 
   deleteLobby() {
@@ -85,7 +88,7 @@ export class LobbyPage implements OnInit {
 
   async exitLobby() {
     try {
-      if (this.isLeader()) {
+      if (this.leader) {
         await this.presentAlert();
       } else {
         this.socket.emit('exitLobby', this.data);

@@ -55,7 +55,6 @@ export class Tab1Page {
 
   sendName(name: string) {
     this.api.createUser(name).subscribe(id => {
-      console.log('user id:' + id);
       this.api.setUserId(id);
       this.api.setUserName(name);
       this.userName = name;

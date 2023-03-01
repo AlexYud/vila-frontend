@@ -34,14 +34,14 @@ export class LobbyPage implements OnInit {
   ) { }
 
   ngOnInit() { 
-    if (!this.api.getIsInLobby()) this.socket.emit('joinLobby', this.data);
     this.api.getUsersInLobby(this.lobbyId).subscribe({
       next: (usersInLobby) => {
         this.users = usersInLobby;
         if (this.isLeader()) this.leader = true;
       },
       error: (e) => this.utils.presentToast('danger', 'close-circle', JSON.stringify(e))
-    })
+    });
+    this.socket.emit('joinLobby', this.data);
     this.socket.on(`update ${this.lobbyId}`, (usersInLobby: any) => {
       this.users = usersInLobby;
       if (this.isLeader()) this.leader = true;
@@ -64,7 +64,6 @@ export class LobbyPage implements OnInit {
           text: 'Sair',
           role: 'confirm',
           handler: () => {
-            this.api.setIsInLobby(false);
             this.socket.emit('exitLobby', this.data);
             this.router.navigate(['tabs/tab2'], { replaceUrl: true });
           },
@@ -93,7 +92,6 @@ export class LobbyPage implements OnInit {
       if (this.leader) {
         await this.presentAlert();
       } else {
-        this.api.setIsInLobby(false);
         this.socket.emit('exitLobby', this.data);
         this.router.navigate(['tabs/tab2'], { replaceUrl: true });
       }

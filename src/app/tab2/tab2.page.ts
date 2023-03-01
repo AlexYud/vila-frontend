@@ -66,7 +66,6 @@ export class Tab2Page {
   sendLobbyData(data: any) {
     this.api.createLobby(data[0], data[1]).subscribe({
       next: (lobbyId) => {
-        this.api.setIsInLobby(true);  
         this.router.navigate(['lobby', lobbyId[0]], { replaceUrl: true });
       },
       error: (e) => this.utils.presentToast('danger', 'close-circle', JSON.stringify(e)),
@@ -74,7 +73,6 @@ export class Tab2Page {
   }
 
   joinLobby(lobbyId: number) {
-    this.api.setIsInLobby(true);  
     this.router.navigate(['lobby', lobbyId], { replaceUrl: true })
   }
 
